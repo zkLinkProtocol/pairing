@@ -367,3 +367,9 @@ impl G2Prepared {
 fn bls12_engine_tests() {
     crate::tests::engine::engine_tests::<Bls12>();
 }
+
+#[test]
+fn bbb() {
+    let shifting = BLS_X >>1;
+    println!("{}", shifting);
+}
