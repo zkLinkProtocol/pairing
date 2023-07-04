@@ -780,7 +780,7 @@ pub mod g1 {
     }
 
     impl G1Uncompressed {
-        pub fn to_g1_uncompressed(bytes: [u8; 64]) -> Self {
+        pub fn from_fixed_bytes(bytes: [u8; 64]) -> Self {
             G1Uncompressed(bytes)
         }
     }
@@ -1159,7 +1159,7 @@ pub mod g2 {
     pub struct G2Uncompressed([u8; 128]);
 
     impl G2Uncompressed {
-        pub fn to_g2_uncompressed(bytes: [u8; 128]) -> Self {
+        pub fn from_fixed_bytes(bytes: [u8; 128]) -> Self {
             G2Uncompressed(bytes)
         }
     }
