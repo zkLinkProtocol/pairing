@@ -779,6 +779,12 @@ pub mod g1 {
         }
     }
 
+    impl G1Uncompressed {
+        pub fn from_fixed_bytes(bytes: [u8; 64]) -> Self {
+            G1Uncompressed(bytes)
+        }
+    }
+
     impl AsRef<[u8]> for G1Uncompressed {
         fn as_ref(&self) -> &[u8] {
             &self.0
@@ -1151,6 +1157,12 @@ pub mod g2 {
 
     #[derive(Copy, Clone)]
     pub struct G2Uncompressed([u8; 128]);
+
+    impl G2Uncompressed {
+        pub fn from_fixed_bytes(bytes: [u8; 128]) -> Self {
+            G2Uncompressed(bytes)
+        }
+    }
 
     impl AsRef<[u8]> for G2Uncompressed {
         fn as_ref(&self) -> &[u8] {
