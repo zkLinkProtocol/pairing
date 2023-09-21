@@ -467,6 +467,17 @@ impl G2Prepared {
     }
 }
 
+impl ec_gpu::GpuName for G1Affine {
+    fn name() -> String {
+        ec_gpu::name!()
+    }
+}
+
+impl ec_gpu::GpuName for G2Affine {
+    fn name() -> String {
+        ec_gpu::name!()
+    }
+}
 
 #[cfg(test)]
 use rand::{Rand, SeedableRng, XorShiftRng};

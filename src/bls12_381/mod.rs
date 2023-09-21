@@ -363,6 +363,18 @@ impl G2Prepared {
     }
 }
 
+impl ec_gpu::GpuName for G1Affine {
+    fn name() -> String {
+        ec_gpu::name!()
+    }
+}
+
+impl ec_gpu::GpuName for G2Affine {
+    fn name() -> String {
+        ec_gpu::name!()
+    }
+}
+
 #[test]
 fn bls12_engine_tests() {
     crate::tests::engine::engine_tests::<Bls12>();

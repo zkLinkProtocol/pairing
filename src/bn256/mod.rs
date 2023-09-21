@@ -17,7 +17,7 @@ pub use self::fr::{Fr, FrRepr};
 
 use super::{CurveAffine, Engine};
 
-use ff::{Field, ScalarEngine};
+use ff::{Field, ScalarEngine, PrimeField};
 
 #[derive(Clone, Debug)]
 pub struct Bn256;
@@ -464,6 +464,106 @@ impl G2Prepared {
     }
 }
 
+use num_bigint::BigUint;
+use ec_gpu::GpuName;
+
+fn limbs_of<T, E: Clone>(value: T) -> Vec<E> {
+  unsafe {
+    std::slice::from_raw_parts(
+      &value as *const T as *const E,
+      std::mem::size_of::<T>() / std::mem::size_of::<E>(),
+    )
+    .to_vec()
+  }
+}
+
+impl ec_gpu::GpuName for G1Affine {
+    fn name() -> String {
+        ec_gpu::name!()
+    }
+}
+
+impl ec_gpu::GpuName for G2Affine {
+    fn name() -> String {
+        ec_gpu::name!()
+    }
+}
+
+impl ec_gpu::GpuName for Fr {
+    fn name() -> String {
+        ec_gpu::name!()
+    }
+}
+
+impl ec_gpu::GpuField for Fr {
+    fn one() -> Vec<u32> {
+        limbs_of(<Fr as ff::Field>::one())
+    }
+
+    fn r2() -> Vec<u32> {
+        // Calculates `R ^ 2 mod P` and returns the result as a vector of 32bit limbs
+        BigUint::new(limbs_of::<_, u32>(<Fr as ff::Field>::one()))
+        .modpow(
+          &BigUint::from_slice(&[2]),
+          &BigUint::new(limbs_of::<_, u32>(Fr::char())),
+        )
+        .to_u32_digits()
+    }
+
+    fn modulus() -> Vec<u32> {
+        limbs_of(Fr::char())
+    }
+}
+
+impl ec_gpu::GpuName for Fq {
+    fn name() -> String {
+        ec_gpu::name!()
+    }
+}
+
+impl ec_gpu::GpuField for Fq {
+    fn one() -> Vec<u32> {
+        limbs_of(<Fq as ff::Field>::one())
+    }
+
+    fn r2() -> Vec<u32> {
+        // Calculates `R ^ 2 mod P` and returns the result as a vector of 32bit limbs
+        BigUint::new(limbs_of::<_, u32>(<Fq as ff::Field>::one()))
+        .modpow(
+          &BigUint::from_slice(&[2]),
+          &BigUint::new(limbs_of::<_, u32>(Fq::char())),
+        )
+        .to_u32_digits()
+    }
+
+    fn modulus() -> Vec<u32> {
+        limbs_of(Fq::char())
+    }
+}
+
+impl ec_gpu::GpuName for Fq2 {
+    fn name() -> String {
+        ec_gpu::name!()
+    }
+}
+
+impl ec_gpu::GpuField for Fq2 {
+    fn one() -> Vec<u32> {
+        <Fq as ec_gpu::GpuField>::one()
+    }
+
+    fn r2() -> Vec<u32> {
+        Fq::r2()
+    }
+
+    fn modulus() -> Vec<u32> {
+        Fq::modulus()
+    }
+
+    fn sub_field_name() -> Option<String> {
+        Some(Fq::name())
+    }
+}
 
 #[cfg(test)]
 use rand::{Rand, SeedableRng, XorShiftRng};

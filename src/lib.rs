@@ -33,6 +33,7 @@ pub use self::wnaf::Wnaf;
 use ff::{Field, PrimeField, PrimeFieldDecodingError, PrimeFieldRepr, ScalarEngine, SqrtField};
 use std::error::Error;
 use std::fmt;
+use ec_gpu::GpuName;
 
 /// An "engine" is a collection of types (fields, elliptic curve groups, etc.)
 /// with well-defined relationships. In particular, the G1/G2 curve groups are
@@ -56,7 +57,7 @@ pub trait Engine: ScalarEngine {
             Pair = Self::G2Affine,
             PairingResult = Self::Fqk,
         >
-        + From<Self::G1> + RawEncodable;
+        + From<Self::G1> + RawEncodable + GpuName;
 
     /// The projective representation of an element in G2.
     type G2: CurveProjective<
@@ -76,7 +77,7 @@ pub trait Engine: ScalarEngine {
             Pair = Self::G1Affine,
             PairingResult = Self::Fqk,
         >
-        + From<Self::G2>;
+        + From<Self::G2> + GpuName;
 
     /// The base field that hosts G1.
     type Fq: PrimeField + SqrtField;
