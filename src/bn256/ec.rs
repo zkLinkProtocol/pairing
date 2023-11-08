@@ -888,6 +888,12 @@ pub mod g1 {
     #[derive(Copy, Clone)]
     pub struct G1Compressed([u8; 32]);
 
+    impl G1Compressed {
+        pub fn from_fixed_bytes(bytes: [u8; 32]) -> Self {
+            G1Compressed(bytes)
+        }
+    }
+
     impl AsRef<[u8]> for G1Compressed {
         fn as_ref(&self) -> &[u8] {
             &self.0
