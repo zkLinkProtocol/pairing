@@ -1289,6 +1289,12 @@ pub mod g2 {
     #[derive(Copy, Clone)]
     pub struct G2Compressed([u8; 64]);
 
+    impl G2Compressed {
+        pub fn from_fixed_bytes(bytes: [u8; 64]) -> Self {
+            G2Compressed(bytes)
+        }
+    }
+
     impl AsRef<[u8]> for G2Compressed {
         fn as_ref(&self) -> &[u8] {
             &self.0
