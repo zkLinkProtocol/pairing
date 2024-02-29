@@ -1,9 +1,9 @@
 mod ec;
-mod fq;
-mod fq12;
-mod fq2;
-mod fq6;
-mod fr;
+pub mod fq;
+pub mod fq12;
+pub mod fq2;
+pub mod fq6;
+pub mod fr;
 
 // #[cfg(test)]
 // mod tests;
@@ -22,7 +22,7 @@ use super::{CurveAffine, Engine};
 
 use ff::{Field, ScalarEngine};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Bn256;
 
 // U value that originates this particular curve

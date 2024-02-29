@@ -1,5 +1,3 @@
-#![cfg_attr(feature = "asm", feature(asm))]
-
 // `clippy` is a code linting tool for improving code quality by catching
 // common mistakes or strange code patterns. If the `cargo-clippy` feature
 // is provided, all compiler warnings are prohibited.
@@ -12,6 +10,8 @@
 // #![cfg_attr(feature = "cargo-clippy", allow(write_literal))]
 // Force public structures to implement Debug
 #![deny(missing_debug_implementations)]
+// Asm is only available on nightly, with this unstable feature
+#![cfg_attr(feature = "asm", feature(asm_const))]
 
 extern crate byteorder;
 extern crate rand;
@@ -30,8 +30,11 @@ pub mod compact_bn256;
 mod wnaf;
 pub use self::wnaf::Wnaf;
 
+mod base;
+pub use self::base::*;
+
 use ff::{Field, PrimeField, PrimeFieldDecodingError, PrimeFieldRepr, ScalarEngine, SqrtField};
-use std::error::Error;
+use std::{error::Error};
 use std::fmt;
 use ec_gpu::GpuName;
 
@@ -131,7 +134,7 @@ pub trait CurveProjective:
     type Engine: Engine<Fr = Self::Scalar>;
     type Scalar: PrimeField + SqrtField;
     type Base: SqrtField;
-    type Affine: CurveAffine<Projective = Self, Scalar = Self::Scalar>;
+    type Affine: CurveAffine<Projective = Self, Scalar = Self::Scalar, Base = Self::Base>;
 
     /// Returns the additive identity.
     fn zero() -> Self;
@@ -211,12 +214,23 @@ pub trait CurveProjective:
 /// Affine representation of an elliptic curve point guaranteed to be
 /// in the correct prime order subgroup.
 pub trait CurveAffine:
-    Copy + Clone + Sized + Send + Sync + fmt::Debug + fmt::Display + PartialEq + Eq + 'static
+    Copy 
+    + Clone 
+    + Sized 
+    + Send 
+    + Sync 
+    + fmt::Debug 
+    + fmt::Display 
+    + PartialEq 
+    + Eq 
+    + 'static
+    + serde::Serialize
+    + serde::de::DeserializeOwned
 {
     type Engine: Engine<Fr = Self::Scalar>;
     type Scalar: PrimeField + SqrtField;
     type Base: SqrtField;
-    type Projective: CurveProjective<Affine = Self, Scalar = Self::Scalar>;
+    type Projective: CurveProjective<Affine = Self, Scalar = Self::Scalar, Base = Self::Base>;
     type Prepared: Clone + Send + Sync + 'static;
     type Uncompressed: EncodedPoint<Affine = Self>;
     type Compressed: EncodedPoint<Affine = Self>;

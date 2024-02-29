@@ -10,7 +10,7 @@ macro_rules! curve_impl {
         $compressed:ident,
         $pairing:ident
     ) => {
-        #[derive(Copy, Clone, PartialEq, Eq, Debug)]
+        #[derive(Copy, Clone, PartialEq, Eq, Debug, ::serde::Serialize, ::serde::Deserialize)]
         pub struct $affine {
             pub(crate) x: $basefield,
             pub(crate) y: $basefield,
@@ -779,6 +779,12 @@ pub mod g1 {
         }
     }
 
+    impl G1Uncompressed {
+        pub fn from_fixed_bytes(bytes: [u8; 64]) -> Self {
+            G1Uncompressed(bytes)
+        }
+    }
+
     impl AsRef<[u8]> for G1Uncompressed {
         fn as_ref(&self) -> &[u8] {
             &self.0
@@ -881,6 +887,12 @@ pub mod g1 {
 
     #[derive(Copy, Clone)]
     pub struct G1Compressed([u8; 32]);
+
+    impl G1Compressed {
+        pub fn from_fixed_bytes(bytes: [u8; 32]) -> Self {
+            G1Compressed(bytes)
+        }
+    }
 
     impl AsRef<[u8]> for G1Compressed {
         fn as_ref(&self) -> &[u8] {
@@ -1152,6 +1164,12 @@ pub mod g2 {
     #[derive(Copy, Clone)]
     pub struct G2Uncompressed([u8; 128]);
 
+    impl G2Uncompressed {
+        pub fn from_fixed_bytes(bytes: [u8; 128]) -> Self {
+            G2Uncompressed(bytes)
+        }
+    }
+
     impl AsRef<[u8]> for G2Uncompressed {
         fn as_ref(&self) -> &[u8] {
             &self.0
@@ -1270,6 +1288,12 @@ pub mod g2 {
 
     #[derive(Copy, Clone)]
     pub struct G2Compressed([u8; 64]);
+
+    impl G2Compressed {
+        pub fn from_fixed_bytes(bytes: [u8; 64]) -> Self {
+            G2Compressed(bytes)
+        }
+    }
 
     impl AsRef<[u8]> for G2Compressed {
         fn as_ref(&self) -> &[u8] {

@@ -1,9 +1,9 @@
 mod ec;
-mod fq;
-mod fq12;
-mod fq2;
-mod fq6;
-mod fr;
+pub mod fq;
+pub mod fq12;
+pub mod fq2;
+pub mod fq6;
+pub mod fr;
 
 pub use self::ec::{
     G1, G1Affine, G1Compressed, G1Prepared, G1Uncompressed,
@@ -19,7 +19,7 @@ use super::{CurveAffine, Engine};
 
 use ff::{Field, ScalarEngine, PrimeField};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Bn256;
 
 // U value that originates this particular curve

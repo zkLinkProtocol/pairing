@@ -1,9 +1,9 @@
 mod ec;
-mod fq;
-mod fq12;
-mod fq2;
-mod fq6;
-mod fr;
+pub mod fq;
+pub mod fq12;
+pub mod fq2;
+pub mod fq6;
+pub mod fr;
 
 #[cfg(test)]
 mod tests;
@@ -26,7 +26,7 @@ use ff::{BitIterator, Field, ScalarEngine};
 const BLS_X: u64 = 0xd201000000010000;
 const BLS_X_IS_NEGATIVE: bool = true;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Bls12;
 
 impl ScalarEngine for Bls12 {
@@ -378,4 +378,10 @@ impl ec_gpu::GpuName for G2Affine {
 #[test]
 fn bls12_engine_tests() {
     crate::tests::engine::engine_tests::<Bls12>();
+}
+
+#[test]
+fn bbb() {
+    let shifting = BLS_X >>1;
+    println!("{}", shifting);
 }
