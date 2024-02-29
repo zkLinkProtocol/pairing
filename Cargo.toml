@@ -23,7 +23,7 @@ ff = {package = "ff_ce", version = "0.14.*", features = ["derive"]}
 # ff = { path = '../ff', package = "ff_ce", features = ["derive"]}
 serde = {version = "1", features = ["derive"]}
 
-ec-gpu = { git = "https://github.com/zkLinkProtocol/ec-gpu.git", branch = "master" }
+ec-gpu = { git = "https://github.com/zkLinkProtocol/ec-gpu.git", branch = "dev" }
 num-bigint = "0.2"
 
 [features]
